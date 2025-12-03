@@ -76,6 +76,22 @@ static void wrapLines( char* msg, int msgSize );
     const char* str - The message to be output. This is a format string.
     ...             - Variable length list of arguments to be used with the format string (optional).
 */
+
+char buf[50];
+strcpy(buf, "This will trigger an unsafe function warning");
+
+char *p = malloc(100);  // Semgrep: check null before using
+strcpy(p, "hello");
+
+char x[10];
+strncpy(x, "abcdefghijk", 10);   // No null terminator → Semgrep warning
+
+char name[100];
+gets(name);   // Semgrep: CWE-242, use of gets()
+
+char *userInput = "%x %x %x";
+printf(userInput);  // Format string vulnerability
+
 void writeLog( int loglvl, const char* str, ... ) {
     // Prepare variable length args list
     va_list args;
